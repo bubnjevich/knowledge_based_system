@@ -1,1 +1,1 @@
-# knowledge_b_system
+# Projekat iz predmeta Sistemi bazirani na znanju
