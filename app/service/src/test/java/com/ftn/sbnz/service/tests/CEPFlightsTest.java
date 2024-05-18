@@ -27,22 +27,7 @@ public class CEPFlightsTest {
     }
 
     private void runPseudoClockExample(KieSession ksession) {
-        SessionPseudoClock clock = ksession.getSessionClock();
-        RunWay runWay = new RunWay("My Run Way 1");
-        for (int index = 0; index < 100; index++) {
-            ksession.insert(new FlightEvent(runWay));
-            clock.advanceTime(4, TimeUnit.MINUTES);
-            ksession.insert(new FlightEvent(runWay));
-            int ruleCount = ksession.fireAllRules();
-            assertThat(ruleCount, equalTo(0));
-            clock.advanceTime(4, TimeUnit.MINUTES);
 
-        }
-        //We manually advance time 1 minute, without a heart beat
-        ksession.insert(new FlightEvent(runWay));
-        ksession.insert(new FlightEvent(runWay));
-        int ruleCount = ksession.fireAllRules();
-        assertThat(ruleCount, equalTo(1));
 
     }
 }

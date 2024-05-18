@@ -1,0 +1,93 @@
+package basic;
+import com.ftn.sbnz.model.Plant;
+import com.ftn.sbnz.model.PerennialPlant;
+import com.ftn.sbnz.model.AnnualPlant;
+import com.ftn.sbnz.model.DTO.AdviceRequestDTO;
+import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
+import com.ftn.sbnz.model.Soil;
+import com.ftn.sbnz.model.FloweringPlant;
+import com.ftn.sbnz.model.enums.PlantFunctionality;
+import com.ftn.sbnz.model.enums.PlantType;
+import com.ftn.sbnz.model.enums.Climate;
+import com.ftn.sbnz.model.enums.Season;
+import com.ftn.sbnz.model.enums.FlowerColor;
+import java.util.Set;
+import com.ftn.sbnz.model.DTO.PlantLifespan
+
+global Set<RecommendedPlantDTO> recommendations;
+
+
+
+rule "Preporuci mi biljke za senku"
+    when
+
+        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SHADE_PROVIDER)
+        $plant: Plant($plantFunctionalities: plantFunctionalities)
+        eval($plantFunctionalities.contains(PlantFunctionality.SHADE_PROVIDER))
+
+
+    then
+        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+        recommendedPlant.setId($plant.getId());
+        recommendedPlant.setName($plant.getName());
+        recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+        recommendations.add(recommendedPlant);
+        insert(recommendedPlant);
+end
+
+
+
+rule "Preporuci mi visegodisnje biljke sa odredjenom bojom cveta"
+    when
+
+        $adviceRequest : AdviceRequestDTO()
+        $flowerPlant: FloweringPlant(flowerColor == $adviceRequest.flowerColor)
+
+    then
+        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+        recommendedPlant.setId($flowerPlant.getId());
+        recommendedPlant.setName($flowerPlant.getName());
+        recommendedPlant.setPlantLifespan(PlantLifespan.PERENNIAL);
+        recommendations.add(recommendedPlant);
+        insert(recommendedPlant);
+end
+
+
+
+rule "Preporuci mi medonosne biljke"
+    when
+
+        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.POLLINATOR)
+        $plant: Plant($plantFunctionalities: plantFunctionalities)
+        eval($plantFunctionalities.contains(PlantFunctionality.POLLINATOR))
+
+
+    then
+        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+        recommendedPlant.setId($plant.getId());
+        recommendedPlant.setName($plant.getName());
+        recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+        recommendations.add(recommendedPlant);
+        insert(recommendedPlant);
+end
+
+
+rule "Preporuci mi jestive biljke "
+    when
+
+        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SPICE)
+        $plant: Plant($plantFunctionalities: plantFunctionalities)
+        eval($plantFunctionalities.contains(PlantFunctionality.SPICE))
+
+
+    then
+        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+        recommendedPlant.setId($plant.getId());
+        recommendedPlant.setName($plant.getName());
+        recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+        recommendations.add(recommendedPlant);
+        insert(recommendedPlant);
+end
+
+
+

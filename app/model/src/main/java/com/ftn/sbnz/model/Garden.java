@@ -1,23 +1,40 @@
 package com.ftn.sbnz.model;
 
-public class Garden {
+import com.ftn.sbnz.model.enums.Climate;
 
-    private final Long id;
+import javax.persistence.*;
+
+@Entity
+public class Garden {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private Long id;
     private double sizeInSquareMeters;
-    private SoilType soilType;
+
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "soilId")
+    private Soil soil;
     private int directSunlightExposureInHours;
+    @Enumerated(EnumType.STRING)
     private Climate climate;
 
-    public Garden(Long id, double sizeInSquareMeters, SoilType soilType, int directSunlightExposureInHours, Climate climate) {
-        this.id = id;
+    public Garden() {
+    }
+
+    public Garden(double sizeInSquareMeters, Soil soil, int directSunlightExposureInHours, Climate climate) {
         this.sizeInSquareMeters = sizeInSquareMeters;
-        this.soilType = soilType;
+        this.soil = soil;
         this.directSunlightExposureInHours = directSunlightExposureInHours;
         this.climate = climate;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public double getSizeInSquareMeters() {
@@ -28,12 +45,12 @@ public class Garden {
         this.sizeInSquareMeters = sizeInSquareMeters;
     }
 
-    public SoilType getSoilType() {
-        return soilType;
+    public Soil getSoil() {
+        return soil;
     }
 
-    public void setSoilType(SoilType soilType) {
-        this.soilType = soilType;
+    public void setSoil(Soil soil) {
+        this.soil = soil;
     }
 
     public int getDirectSunlightExposureInHours() {
