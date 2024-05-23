@@ -52,7 +52,11 @@
 			<artifactId>drools-compiler</artifactId>
 			<version>${drools.version}</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

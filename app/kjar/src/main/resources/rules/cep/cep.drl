@@ -1,0 +1,67 @@
+package rules.cep;
+import com.ftn.sbnz.model.WeatherCondition;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors
+import com.ftn.sbnz.model.Alarm
+import com.ftn.sbnz.model.enums.AlarmType;
+import com.ftn.sbnz.model.SoilMoisture;
+import com.ftn.sbnz.model.Plant;
+import com.ftn.sbnz.model.enums.PlantFunctionality;
+import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
+import com.ftn.sbnz.model.DTO.PlantLifespan
+import java.util.Set
+import com.ftn.sbnz.model.PerennialPlant;
+
+
+
+global Set<RecommendedPlantDTO> recommendations;
+
+
+rule "Detect drought conditions"
+when
+    $conditions: List() from accumulate(
+        WeatherCondition($date: measurementDate, $temperature: temperature, $precipitation: precipitation)
+        over window:time(5d),
+        collectList($date)
+    )
+    $averageTemperature: Double() from accumulate(
+        WeatherCondition($temperature: temperature) over window:time(5d),
+        average($temperature)
+    )
+    $averagePrecipitation: Double() from accumulate(
+        WeatherCondition($precipitation: precipitation) over window:time(5d),
+        average($precipitation)
+    )
+    eval($averageTemperature > 28.0)
+    eval($averagePrecipitation < 5.0)
+then
+    Alarm droughtAlarm = new Alarm();
+    droughtAlarm.setType(AlarmType.DROUGHT);
+    droughtAlarm.setMessage("Potential drought detected based on the last 5 days of weather data.");
+    insert(droughtAlarm);
+end
+
+rule "Analyze soil moisture after detecting drought"
+when
+    $droughtAlarm: Alarm(type == AlarmType.DROUGHT)
+    $soilMoisture: SoilMoisture(moistureLevel < 20.0) over window:time(1d)  // prag vlažnosti
+then
+    Alarm moistureAlarm = new Alarm(AlarmType.LOW_SOIL_MOISTURE, "Soil moisture is below threshold. Recommend drought-resistant plants.");
+    insert(moistureAlarm);
+end
+
+
+rule "Recommend drought-resistant plants"
+when
+    $recommendation: Alarm(type == AlarmType.LOW_SOIL_MOISTURE)
+    $plant: Plant(plantFunctionalities contains PlantFunctionality.DROUGHT_RESISTANCE)
+then
+
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($plant.getId());
+    recommendedPlant.setName($plant.getName());
+    recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+end
