@@ -2,9 +2,7 @@ package com.ftn.sbnz.service;
 
 import java.util.Arrays;
 
-import org.kie.api.runtime.KieSession;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.kie.api.KieServices;
@@ -36,6 +34,8 @@ public class ServiceApplication  {
 			sb.append(beanName + "\n");
 		}
 		log.info(sb.toString());
+
+
 	}
 
 	@Bean
@@ -44,7 +44,7 @@ public class ServiceApplication  {
 		KieContainer kContainer = ks
 				.newKieContainer(ks.newReleaseId("com.ftn.sbnz", "kjar", "0.0.1-SNAPSHOT"));
 		KieScanner kScanner = ks.newKieScanner(kContainer);
-		kScanner.start(1000);
+		kScanner.start(10_000);
 		return kContainer;
 	}
 	

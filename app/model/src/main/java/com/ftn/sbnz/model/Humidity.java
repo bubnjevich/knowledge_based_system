@@ -22,6 +22,11 @@ public class Humidity {
         this.humidityRangeMax = humidityRangeMax;
     }
 
+    public Humidity(double humidityRangeMin, double humidityRangeMax) {
+        this.humidityRangeMin = humidityRangeMin;
+        this.humidityRangeMax = humidityRangeMax;
+    }
+
     public double getHumidityRangeMin() {
         return humidityRangeMin;
     }

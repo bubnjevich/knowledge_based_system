@@ -11,7 +11,6 @@ import com.ftn.sbnz.service.repositories.FloweringPlantRepository;
 import com.ftn.sbnz.service.repositories.PerennialPlantRepository;
 import com.ftn.sbnz.service.repositories.PlantRepository;
 import com.ftn.sbnz.service.services.interfaces.IPlantAdviceService;
-import org.kie.api.runtime.Globals;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
