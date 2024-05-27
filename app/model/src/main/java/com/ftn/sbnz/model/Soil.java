@@ -9,18 +9,14 @@ public class Soil {
     private Long id;
     @Column
     private String soilType;
-    @Column
-    private double minPhValue;
-    @Column
-    private double maxPhValue;
+
 
     public Soil() {
     }
 
-    public Soil(String soilType, double minPhValue, double maxPhValue) {
+    public Soil(String soilType) {
         this.soilType = soilType;
-        this.minPhValue = minPhValue;
-        this.maxPhValue = maxPhValue;
+
     }
 
     public Long getId() {
@@ -39,19 +35,4 @@ public class Soil {
         this.soilType = soilType;
     }
 
-    public double getMinPhValue() {
-        return minPhValue;
-    }
-
-    public void setMinPhValue(double minPhValue) {
-        this.minPhValue = minPhValue;
-    }
-
-    public double getMaxPhValue() {
-        return maxPhValue;
-    }
-
-    public void setMaxPhValue(double maxPhValue) {
-        this.maxPhValue = maxPhValue;
-    }
 }

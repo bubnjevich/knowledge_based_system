@@ -2,10 +2,10 @@ package com.ftn.sbnz.model.enums;
 
 public enum PlantFunctionality {
     DECORATIVE,
-    EDIBLE,
+    EDIBLE, // JESTIV
     POLLINATOR,
     SHADE_PROVIDER,
-    FRAGRANT,
+    FRAGRANT, // MIRISNA
     DROUGHT_RESISTANCE,
-    SPICE
+    SPICE // ZACIN
 }

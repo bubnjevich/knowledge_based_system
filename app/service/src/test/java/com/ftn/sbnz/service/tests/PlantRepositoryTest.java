@@ -38,8 +38,8 @@ public class PlantRepositoryTest {
 
     private void fillSession(KieSession ksession) {
 
-        Soil soil1 = new Soil("Loamy", 6.0, 7.5);
-        Soil soil2 = new Soil("Sandy", 5.5, 7.0);
+        Soil soil1 = new Soil("LOAMY");
+        Soil soil2 = new Soil("SANDY");
         ksession.insert(soil1);
         ksession.insert(soil2);
 
@@ -51,10 +51,10 @@ public class PlantRepositoryTest {
         List<PlantFunctionality> plantFunctionalities = Arrays.asList(PlantFunctionality.DECORATIVE, PlantFunctionality.DROUGHT_RESISTANCE);
 
         Plant plant = new Plant("Lavander", PlantType.FLOWER, suitableClimates, suitableSoilTypes,
-                plantFunctionalities, 10.0, 35.0, humidity, 1.5, 8);
+                plantFunctionalities, humidity, 1.5, 8);
         ksession.insert(plant);
         ksession.insert(new Plant("Stonecrop", PlantType.FLOWER, suitableClimates, suitableSoilTypes,
-                plantFunctionalities, 10.0, 35.0, humidity, 1.5, 8));
+                plantFunctionalities,  humidity, 1.5, 8));
 
 
     }

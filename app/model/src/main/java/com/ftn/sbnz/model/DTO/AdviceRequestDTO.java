@@ -15,7 +15,19 @@ public class AdviceRequestDTO {
     private PlantFunctionality plantFunctionality;
     private FlowerColor flowerColor;
 
+    private double soilPh;
+
     public AdviceRequestDTO() {
+    }
+
+
+
+    public double getSoilPh() {
+        return soilPh;
+    }
+
+    public void setSoilPh(double soilPh) {
+        this.soilPh = soilPh;
     }
 
     public FlowerColor getFlowerColor() {
