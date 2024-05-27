@@ -9,5 +9,8 @@
         <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
     </kbase>
 
+    <kbase name="template-simple-KBase" packages="template">
+        <ksession name="templateSimpleKsession"/>
+    </kbase>
 
 </kmodule>

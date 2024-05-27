@@ -27,8 +27,6 @@ import java.util.List;
         @ElementCollection(targetClass = PlantFunctionality.class)
         @Enumerated(EnumType.STRING)
         private List<PlantFunctionality> plantFunctionalities;
-        private double minTemperature;
-        private double maxTemperature;
 
         @ManyToOne
         @JoinColumn(name = "humidityId")
@@ -43,15 +41,14 @@ import java.util.List;
     }
 
     public Plant(String name, PlantType plantType, List<Climate> suitableClimates, List<Soil> suitableSoilTypes,
-                 List<PlantFunctionality> plantFunctionalities, double minTemperature, double maxTemperature,
+                 List<PlantFunctionality> plantFunctionalities,
                  Humidity humidity, double height, int lightHoursNeeded) {
         this.name = name;
         this.plantType = plantType;
         this.suitableClimates = suitableClimates;
         this.suitableSoilTypes = suitableSoilTypes;
         this.plantFunctionalities = plantFunctionalities;
-        this.minTemperature = minTemperature;
-        this.maxTemperature = maxTemperature;
+
         this.humidity = humidity;
         this.height = height;
         this.lightHoursNeeded = lightHoursNeeded;
@@ -104,22 +101,6 @@ import java.util.List;
 
     public void setPlantFunctionalities(List<PlantFunctionality> plantFunctionalities) {
         this.plantFunctionalities = plantFunctionalities;
-    }
-
-    public double getMinTemperature() {
-        return minTemperature;
-    }
-
-    public void setMinTemperature(double minTemperature) {
-        this.minTemperature = minTemperature;
-    }
-
-    public double getMaxTemperature() {
-        return maxTemperature;
-    }
-
-    public void setMaxTemperature(double maxTemperature) {
-        this.maxTemperature = maxTemperature;
     }
 
     public Humidity getHumidity() {

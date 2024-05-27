@@ -19,6 +19,7 @@ global Set<RecommendedPlantDTO> recommendations;
 
 
 rule "Preporuci mi biljke za senku"
+    agenda-group "basic"
     when
 
         $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SHADE_PROVIDER)
@@ -38,6 +39,8 @@ end
 
 
 rule "Preporuci mi visegodisnje biljke sa odredjenom bojom cveta"
+    agenda-group "basic"
+
     when
 
         $adviceRequest : AdviceRequestDTO()
@@ -55,6 +58,7 @@ end
 
 
 rule "Preporuci mi medonosne biljke"
+    agenda-group "basic"
     when
 
         $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.POLLINATOR)
@@ -73,6 +77,7 @@ end
 
 
 rule "Preporuci mi jestive biljke "
+    agenda-group "basic"
     when
 
         $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SPICE)

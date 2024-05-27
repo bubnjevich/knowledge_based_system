@@ -31,4 +31,13 @@ public class RecommendedPlantDTO {
     public void setPlantLifespan(PlantLifespan plantLifespan) {
         this.plantLifespan = plantLifespan;
     }
+
+    @Override
+    public String toString() {
+        return "RecommendedPlantDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", plantLifespan=" + plantLifespan +
+                '}';
+    }
 }

@@ -1,0 +1,30 @@
+template header
+minTemperature
+maxTemperature
+climate
+
+package rules.template;
+
+import com.ftn.sbnz.model.Plant;
+import com.ftn.sbnz.model.Soil;
+import com.ftn.sbnz.model.DTO.AdviceRequestDTO;
+import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
+import com.ftn.sbnz.model.PerennialPlant;
+import com.ftn.sbnz.model.AnnualPlant;
+import com.ftn.sbnz.model.FloweringPlant;
+import com.ftn.sbnz.model.DTO.PlantLifespan;
+import java.util.Set;
+
+global Set<RecommendedPlantDTO> recommendations;
+
+template "climate-classification-rules"
+
+rule "Ako je klima u rangu [@{minTemperature}, @{maxTemperature}] preporuci @climate"
+when
+
+
+then
+
+end
+
+end template
