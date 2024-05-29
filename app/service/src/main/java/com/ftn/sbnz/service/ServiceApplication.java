@@ -15,11 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableJpaRepositories("com.ftn.sbnz.*")
 @ComponentScan(basePackages = { "com.ftn.sbnz.*" })
 @EntityScan("com.ftn.sbnz.*")
 @SpringBootApplication
+@EnableScheduling
+
 public class ServiceApplication  {
 	
 	private static Logger log = LoggerFactory.getLogger(ServiceApplication.class);

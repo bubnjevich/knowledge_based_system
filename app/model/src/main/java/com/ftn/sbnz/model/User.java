@@ -37,6 +37,7 @@ public class User implements Serializable {
         this.jwt = jwt;
     }
 
+
     public User(String name, String lastName, String email, String password) {
         this.name = name;
         this.lastName = lastName;
@@ -62,6 +63,14 @@ public class User implements Serializable {
 
     }
 
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public Long getId() {
         return id;

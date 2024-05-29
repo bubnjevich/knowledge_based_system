@@ -23,7 +23,7 @@ public class PerennialPlant extends Plant implements Serializable {
 
     public PerennialPlant(String name, PlantType plantType, List<Climate> suitableClimates, List<Soil> suitableSoilTypes, List<PlantFunctionality> plantFunctionalities, double minTemperature,
                           double maxTemperature, Humidity humidity, double height, int lightHoursNeeded) {
-        super(name, plantType, suitableClimates, suitableSoilTypes, plantFunctionalities, minTemperature, maxTemperature, humidity, height, lightHoursNeeded);
+        super(name, plantType, suitableClimates, suitableSoilTypes, plantFunctionalities, humidity, height, lightHoursNeeded);
     }
 
     public boolean isFrostResistance() {

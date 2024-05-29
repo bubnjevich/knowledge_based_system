@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import userService from "../../services/UserService";
 
 function Copyright(props: any) {
     return (
@@ -26,17 +27,24 @@ function Copyright(props: any) {
     );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const formData = new FormData(event.currentTarget);
+        const userRequest = {
+            name: formData.get('firstName') as string,
+            lastName: formData.get('lastName') as string,
+            email: formData.get('email') as string,
+            password: formData.get('password') as string
+        };
+        try {
+            const response = await userService.register(userRequest);
+            console.log(response); // Ovde možete upravljati odgovorom
+            alert(response.id);
+        } catch (error) {
+            console.error('Registration failed:', error);
+            alert("FAILED")
+        }
     };
 
     return (
