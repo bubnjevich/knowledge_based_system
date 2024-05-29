@@ -1,5 +1,15 @@
 .App {
   text-align: center;
+  /*background-image: url("assets/colorful-flower-garden.jpg");*/
+}
+
+html, body, #root { /* Assuming your app is mounted to an element with id="root" */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: url("assets/colorful-flower-garden.jpg");
+  background-size: cover; /* Slika će biti proporcionalno razvučena tako da u potpunosti pokrije pozadinu */
+  background-position: center; /* Slika će biti centrirana na ekranu */
 }
 
 .App-logo {
@@ -35,4 +45,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+footer {
+  position: absolute; /* Postavljamo apsolutnu poziciju kako bi footer bio na dnu ekrana */
+  bottom: 0; /* Postavljamo footer na dno ekrana */
+  width: 100%;
+  color: white;
+  padding: 8px;
+}
+
+footer p {
+  margin: 0;
 }

@@ -1,25 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {GlobalStyles} from "./components/styled/Global.style";
+import SignUp from "./components/pages/RegisterComponent"
+const AppContent: React.FC = () => {
 
-function App() {
+    return (
+        <>
+      <Routes>
+          <Route path="/register" element={<SignUp/>}></Route>
+      </Routes>
+        </>
+  )
+}
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+        <GlobalStyles/>
+        <Router>
+          <AppContent/>
+        </Router>
+        <footer>
+          <p>Designed by Freepik</p>
+        </footer>
+      </div>
+
   );
 }
 
