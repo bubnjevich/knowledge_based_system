@@ -24,7 +24,7 @@ import java.util.List;
         private List<Climate> suitableClimates;
         @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
         private List<Soil> suitableSoilTypes;
-        @ElementCollection(targetClass = PlantFunctionality.class)
+        @ElementCollection(targetClass = PlantFunctionality.class, fetch = FetchType.EAGER)
         @Enumerated(EnumType.STRING)
         private List<PlantFunctionality> plantFunctionalities;
 

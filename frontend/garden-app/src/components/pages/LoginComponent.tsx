@@ -13,7 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import userService from "../../services/UserService";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {setToken} from "../../auth/userSlice";
 
 function Copyright(props: any) {
     return (
@@ -29,25 +31,29 @@ function Copyright(props: any) {
 }
 
 export default function SignIn() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+        const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const loginRequest = {
+                email: formData.get('email') as string,
+                password: formData.get('password') as string
+            }
+            try {
+                const response = await userService.login(loginRequest);
+                localStorage.setItem("token", response.token);
+                dispatch(setToken(response.token));
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const loginRequest = {
-            email: formData.get('email') as string,
-            password: formData.get('password') as string
-        }
-        try {
-            const response = await userService.login(loginRequest);
-            localStorage.setItem("token", response);
+                console.log(response.token);
+                navigate("/mainPage");
 
-            console.log(response);
-        } catch (error) {
-            console.error('Login failed:', error);
-            alert("Login Failed")
-        }
-    };
+            } catch (error) {
+                console.error('Login failed:', error);
+                alert("Login Failed")
+            }
+        };
 
     return (
             <Container component="main" maxWidth="xs"  style={{ background: 'rgba(255, 255, 255, 0.9)' }}>

@@ -17,15 +17,12 @@ import com.ftn.sbnz.model.DTO.PlantLifespan
 global Set<RecommendedPlantDTO> recommendations;
 
 
-
-rule "Preporuci mi biljke za senku"
-    agenda-group "basic"
+rule "Preporuci mi biljke sa odredjenom funkcionalnoscu"
     when
 
-        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SHADE_PROVIDER)
+        $adviceRequest : AdviceRequestDTO()
         $plant: Plant($plantFunctionalities: plantFunctionalities)
-        eval($plantFunctionalities.contains(PlantFunctionality.SHADE_PROVIDER))
-
+        eval($plantFunctionalities.containsAll($adviceRequest.getPlantFunctionality()))
 
     then
         RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
@@ -44,7 +41,7 @@ rule "Preporuci mi visegodisnje biljke sa odredjenom bojom cveta"
     when
 
         $adviceRequest : AdviceRequestDTO()
-        $flowerPlant: FloweringPlant(flowerColor == $adviceRequest.flowerColor)
+        $flowerPlant: FloweringPlant(flowerColor == $adviceRequest.getFlowerColor())
 
     then
         RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
@@ -54,45 +51,5 @@ rule "Preporuci mi visegodisnje biljke sa odredjenom bojom cveta"
         recommendations.add(recommendedPlant);
         insert(recommendedPlant);
 end
-
-
-
-rule "Preporuci mi medonosne biljke"
-    agenda-group "basic"
-    when
-
-        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.POLLINATOR)
-        $plant: Plant($plantFunctionalities: plantFunctionalities)
-        eval($plantFunctionalities.contains(PlantFunctionality.POLLINATOR))
-
-
-    then
-        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
-        recommendedPlant.setId($plant.getId());
-        recommendedPlant.setName($plant.getName());
-        recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
-        recommendations.add(recommendedPlant);
-        insert(recommendedPlant);
-end
-
-
-rule "Preporuci mi jestive biljke "
-    agenda-group "basic"
-    when
-
-        $adviceRequest : AdviceRequestDTO(plantFunctionality == PlantFunctionality.SPICE)
-        $plant: Plant($plantFunctionalities: plantFunctionalities)
-        eval($plantFunctionalities.contains(PlantFunctionality.SPICE))
-
-
-    then
-        RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
-        recommendedPlant.setId($plant.getId());
-        recommendedPlant.setName($plant.getName());
-        recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
-        recommendations.add(recommendedPlant);
-        insert(recommendedPlant);
-end
-
 
 

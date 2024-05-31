@@ -10,9 +10,9 @@ import java.util.List;
 public class AdviceRequestDTO {
 
     private PlantType plantType;
-    private String soilType;
+    private List<String> soilType;
     private int lightHoursNeeded;
-    private PlantFunctionality plantFunctionality;
+    private List<PlantFunctionality> plantFunctionality;
     private FlowerColor flowerColor;
 
     private double soilPh;
@@ -46,13 +46,7 @@ public class AdviceRequestDTO {
         this.plantType = plantType;
     }
 
-    public String getSoilType() {
-        return soilType;
-    }
 
-    public void setSoilType(String soilType) {
-        this.soilType = soilType;
-    }
 
     public int getLightHoursNeeded() {
         return lightHoursNeeded;
@@ -62,11 +56,20 @@ public class AdviceRequestDTO {
         this.lightHoursNeeded = lightHoursNeeded;
     }
 
-    public PlantFunctionality getPlantFunctionality() {
+
+    public List<String> getSoilType() {
+        return soilType;
+    }
+
+    public void setSoilType(List<String> soilType) {
+        this.soilType = soilType;
+    }
+
+    public List<PlantFunctionality> getPlantFunctionality() {
         return plantFunctionality;
     }
 
-    public void setPlantFunctionality(PlantFunctionality plantFunctionality) {
+    public void setPlantFunctionality(List<PlantFunctionality> plantFunctionality) {
         this.plantFunctionality = plantFunctionality;
     }
 

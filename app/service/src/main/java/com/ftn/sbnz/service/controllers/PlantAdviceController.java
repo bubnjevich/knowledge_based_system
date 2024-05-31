@@ -23,7 +23,7 @@ public class PlantAdviceController {
         this.plantAdviceService = plantAdviceService;
     }
 
-    @PutMapping()
+    @PutMapping("/fullInfo")
     public ResponseEntity<Set<RecommendedPlantDTO>> recommend(@RequestBody AdviceRequestDTO adviceRequestDTO) {
         System.out.println(adviceRequestDTO);
         return new ResponseEntity<>(this.plantAdviceService.getRecommendedPlant(adviceRequestDTO), HttpStatus.OK);

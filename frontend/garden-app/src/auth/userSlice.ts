@@ -18,6 +18,7 @@ export const userSlice = createSlice({
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
             state.token = action.payload;
+            console.log("token postavljen!")
         },
         setUserRole: (state, action: PayloadAction<string>) => {
             state.role = action.payload;

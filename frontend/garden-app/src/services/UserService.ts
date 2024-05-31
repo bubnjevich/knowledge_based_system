@@ -3,12 +3,16 @@ import {UserRequest, LoginRequest} from "../model/User/UserRequest";
 
 const API_BASE_URL: string | undefined = process.env.REACT_APP_API_BASE_URL;
 
+interface LoginResponse {
+    token: string;
+    refreshToken: string;
+}
 const login = async (loginRequest: {
     password: string;
     email: string
-}) : Promise<string> => {
+}) : Promise<LoginResponse> => {
 
-    const response: AxiosResponse<string> = await axios.post(
+    const response: AxiosResponse<LoginResponse> = await axios.post(
         `${API_BASE_URL}/user/login`,
         loginRequest
     );

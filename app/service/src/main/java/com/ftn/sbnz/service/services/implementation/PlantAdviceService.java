@@ -51,9 +51,11 @@ public class PlantAdviceService implements IPlantAdviceService {
         List<AnnualPlant> annualPlants = annualPlantRepository.findAll();
         List<PerennialPlant> perennialPlants = perennialPlantRepository.findAll();
 
+        System.out.println(adviceRequests.getPlantFunctionality());
         kieSession.insert(plants);
         for (Plant p : plants) {
             kieSession.insert(p);
+
         }
 
         for (FloweringPlant p : floweringPlants) {
