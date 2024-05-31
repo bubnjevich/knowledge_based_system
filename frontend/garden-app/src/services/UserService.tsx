@@ -3,14 +3,14 @@ import {UserRequest, LoginRequest} from "../model/User/UserRequest";
 
 const API_BASE_URL: string | undefined = process.env.REACT_APP_API_BASE_URL;
 
-const login = async (email : string, password: string) : Promise<string> => {
+const login = async (loginRequest: {
+    password: string;
+    email: string
+}) : Promise<string> => {
 
     const response: AxiosResponse<string> = await axios.post(
         `${API_BASE_URL}/user/login`,
-        {
-            email,
-            password
-        }
+        loginRequest
     );
     return response.data;
 
