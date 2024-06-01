@@ -5,6 +5,7 @@ import {GlobalStyles} from "./components/styled/Global.style";
 import SignUp from "./components/pages/RegisterComponent"
 import SignIn from "./components/pages/LoginComponent";
 import MainFormPage from "./components/pages/MainFormPage";
+import RecommendedPlantsPage from "./components/pages/RecommendedPlantsPage";
 const AppContent: React.FC = () => {
 
     return (
@@ -12,7 +13,8 @@ const AppContent: React.FC = () => {
       <Routes>
           <Route path="/" element={<SignIn/>}/>
           <Route path="/mainPage" element={<MainFormPage/>}/>
-          <Route path="/register" element={<SignUp/>}></Route>
+          <Route path="/register" element={<SignUp/>}/>
+          <Route path="/recommended" element={<RecommendedPlantsPage/>}/>
       </Routes>
         </>
   )
@@ -25,9 +27,7 @@ const App = () => {
         <Router>
           <AppContent/>
         </Router>
-        <footer>
-          <p>Designed by Freepik</p>
-        </footer>
+
       </div>
 
   );

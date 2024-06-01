@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import { Grass } from "@mui/icons-material";
 import {AdviceRequest, PlantType} from "../../model/User/Advice/AdviceRequest";
 import {submitPlantData} from "../../services/PlantAdviceService";
+import {useNavigate} from "react-router-dom";
 
 const plantTypes = ["TREE", "SHRUB", "FLOWER", "HERB"];
 const soilTypes = ["SANDY", "LOAMY", "CLAY", "PEAT", "CHALKY"];
@@ -36,13 +37,15 @@ export default function MainFormPage() {
         flowerColor: selectedColor,
         soilPh: soilPh
     });
+    const navigate = useNavigate();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log(formData);
         try {
-            await submitPlantData(formData);
-            alert('Data successfully submitted');
+            const recommended = await submitPlantData(formData);
+            navigate('/recommended', { state: { recommendedPlants: recommended } });
+
         } catch (error) {
             alert('Failed to submit data');
         }
@@ -94,7 +97,14 @@ export default function MainFormPage() {
                             id="soil-type"
                             value={soilType}
                             multiple={true}
-                            onChange={(e) => setSoilType(e.target.value as string[])}
+                            onChange={(e) => {
+                                const soilTypes = e.target.value as string[];
+                                setSoilType(soilTypes);
+                                setFormData({
+                                ...formData,
+                                soilType: soilTypes
+                            });}
+                        }
                             label="Soil Type"
                         >
                             {soilTypes.map((type) => (
@@ -107,10 +117,17 @@ export default function MainFormPage() {
                         required
                         fullWidth
                         id="light-hours"
-                        label="Light Hours Needed"
+                        label="Garden exposure to the sun"
                         type="number"
                         value={lightHours}
-                        onChange={(e) => setLightHours(Number(e.target.value))}
+                        onChange={(e) => {
+                            setLightHours(Number(e.target.value));
+
+                            setFormData({
+                                ...formData,
+                                lightHoursNeeded: Number(e.target.value)
+                            })
+                        }}
                     />
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="functionalities-label">Plant Functionality</InputLabel>
@@ -139,7 +156,14 @@ export default function MainFormPage() {
                             labelId="flower-colors-label"
                             id="flower-colors"
                             value={selectedColor}
-                            onChange={(e) => setSelectedColor(e.target.value)}
+                            onChange={(e) => {
+                                setSelectedColor(e.target.value)
+                                setFormData({
+                                    ...formData,
+                                    flowerColor: e.target.value
+                                });
+
+                            }}
                         >
                             {flowerColors.map((color) => (
                                 <MenuItem key={color} value={color}>{color}</MenuItem>
@@ -154,7 +178,13 @@ export default function MainFormPage() {
                         label="Soil pH"
                         type="number"
                         value={soilPh}
-                        onChange={(e) => setSoilPh(Number(e.target.value))}
+                        onChange={(e) => {setSoilPh(Number(e.target.value))
+
+                            setFormData({
+                                ...formData,
+                                soilPh: Number(e.target.value)
+                            });
+                        }}
                     />
                     <Button
                         type="submit"

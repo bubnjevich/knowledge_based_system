@@ -5,6 +5,11 @@ export enum PlantType {
     HERB = "HERB"
 }
 
+export enum PlantLifespan {
+    ANNUAL = "ANNUAL",
+    PERENNIAL = "PERENNIAL"
+}
+
 export enum PlantFunctionality {
     DECORATIVE = "DECORATIVE",
     EDIBLE = "EDIBLE",
