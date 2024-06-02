@@ -52,8 +52,6 @@ public class PlantAdviceService implements IPlantAdviceService {
         List<PerennialPlant> perennialPlants = perennialPlantRepository.findAll();
         kieSession.insert(new ParentChildBackward("FloweringPlant", "PerennialPlant"));
         kieSession.insert(new ParentChildBackward("PerennialPlant", "Plant"));
-        kieSession.insert(new ParentChildBackward("NotFloweringAnnualPlant", "Plant"));
-        kieSession.insert(new ParentChildBackward("FloweringAnnualPlant", "Plant"));
 
         kieSession.insert(plants);
         for (Plant p : plants) {
