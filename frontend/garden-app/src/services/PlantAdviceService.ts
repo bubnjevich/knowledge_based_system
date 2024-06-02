@@ -18,6 +18,25 @@ export const submitPlantData = async (plantData: AdviceRequest): Promise<Recomme
 };
 
 
+export const fetchRecommendedPlants = async (): Promise<RecommendedPlant[]> => {
+    try {
+        const plantData = {
+            plantType: "SHRUB",
+            soilType: null,
+            lightHoursNeeded: 0,
+            plantFunctionality: [],
+            flowerColor: null,
+            soilPh: 0
+        }
+        const response = await axiosInstance.put(`${API_BASE_URL}/advices/fullInfo`, plantData);
+        console.log('Data successfully submitted:', response.data);
+        return response.data;
+    } catch (e) {
+        console.log("Error getting recommended data: ", e)
+        throw e;
+    }
+}
+
 const UNSPLASH_ACCESS_KEY = 'kwskgXdQvRPKEc6RmJExM_ZhuMhDLXN9u6dmRzsX9IY'; // Replace with your Unsplash Access Key
 
 export const fetchPlantImage = async (plantName: string): Promise<string> => {
@@ -38,5 +57,26 @@ export const fetchPlantImage = async (plantName: string): Promise<string> => {
     } catch (error) {
         console.error('Error fetching plant image:', error);
         return 'default_image_url'; // Provide a default image URL in case of error
+    }
+};
+
+export interface SimilarPlant {
+    name: string,
+    level: number
+}
+
+export const SimilarPlantService = {
+    recommendSimilarPlant: async (name: string, level: number) => {
+        const similar = {
+            name: name,
+            level: level
+        }
+        try {
+            const response = await axiosInstance.put('/advices/similarPlants', similar);
+
+            return response.data;
+        } catch (error) {
+          throw (error)
+        }
     }
 };

@@ -5,6 +5,8 @@ import com.ftn.sbnz.model.enums.*;
 import javax.persistence.*;
 
 import java.util.List;
+import org.kie.api.definition.type.Position;
+import org.kie.api.definition.type.Position;
 
 
     @Entity
@@ -15,9 +17,11 @@ import java.util.List;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         @Column
+        @Position(0)
         private String name;
         @Enumerated(EnumType.STRING)
         @Column(name = "plantType")
+        @Position(1)
         private PlantType plantType;
         @ElementCollection(targetClass = Climate.class)
         @Enumerated(EnumType.STRING)
@@ -26,7 +30,7 @@ import java.util.List;
         private List<Soil> suitableSoilTypes;
         @ElementCollection(targetClass = PlantFunctionality.class, fetch = FetchType.EAGER)
         @Enumerated(EnumType.STRING)
-        private List<PlantFunctionality> plantFunctionalities;
+            private List<PlantFunctionality> plantFunctionalities;
 
         @ManyToOne
         @JoinColumn(name = "humidityId")

@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { Grid, Pagination } from '@mui/material';
 import { RecommendedPlant } from '../../model/RecommendedPlant';
 import {fetchPlantImage} from "../../services/PlantAdviceService";
+import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 const RecommendedPlantsPage = () => {
     const location = useLocation();
@@ -17,6 +19,7 @@ const RecommendedPlantsPage = () => {
     const [plantImages, setPlantImages] = useState<{ [key: string]: string }>({});
     const itemsPerPage = 6; // Adjust as needed
     const pageCount = Math.ceil(recommendedPlants.length / itemsPerPage);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -37,12 +40,27 @@ const RecommendedPlantsPage = () => {
 
     const currentPlants = recommendedPlants.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+
+    const handleCardClick = (plant: RecommendedPlant) => {
+        navigate('/plant-details', { state: { plant } });
+    };
+
     return (
         <div style={{ padding: "20px"}}>
             <div style={{width: "80%", margin: "auto"}}>
             <Grid container spacing={2} style={{ backgroundColor: "rgba(255, 255, 255, 0.8)"}}>
                     {currentPlants.map((plant: RecommendedPlant) => (
                         <Grid item xs={12} sm={6} md={4} key={plant.id}>
+                            <Box
+                                sx={{
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        transform: 'scale(1.05)',
+                                        transition: 'transform 0.2s',
+                                    },
+                                }}
+                                onClick={() => handleCardClick(plant)}
+                                >
                             <Card sx={{ minWidth: 300, maxWidth: 400 }}>
                                 <CardMedia
                                     component="img"
@@ -80,7 +98,8 @@ const RecommendedPlantsPage = () => {
                                     <Button size="small">Learn More</Button>
                                 </CardActions>
                             </Card>
-                        </Grid>
+                            </Box>
+                            </Grid>
                     ))}
                 </Grid>
 

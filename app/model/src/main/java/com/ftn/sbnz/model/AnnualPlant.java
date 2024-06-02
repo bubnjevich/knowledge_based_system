@@ -20,8 +20,8 @@ public class AnnualPlant extends Plant implements Serializable {
         super();
     }
 
-    public AnnualPlant(String name, PlantType plantType, List<Climate> suitableClimates, List<Soil> suitableSoilTypes, List<PlantFunctionality> plantFunctionalities, double minTemperature,
-                       double maxTemperature, Humidity humidity, double height, Season season, FlowerColor flowerColor, int lightHoursNeeded) {
+    public AnnualPlant(String name, PlantType plantType, List<Climate> suitableClimates, List<Soil> suitableSoilTypes, List<PlantFunctionality> plantFunctionalities,
+                  Humidity humidity, double height, Season season, FlowerColor flowerColor, int lightHoursNeeded) {
         super(name, plantType, suitableClimates, suitableSoilTypes, plantFunctionalities, humidity, height, lightHoursNeeded);
         this.season = season;
         this.flowerColor = flowerColor;

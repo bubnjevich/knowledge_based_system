@@ -6,6 +6,7 @@ import SignUp from "./components/pages/RegisterComponent"
 import SignIn from "./components/pages/LoginComponent";
 import MainFormPage from "./components/pages/MainFormPage";
 import RecommendedPlantsPage from "./components/pages/RecommendedPlantsPage";
+import PlantDetailsPage from "./components/pages/PlantDetailsPage";
 const AppContent: React.FC = () => {
 
     return (
@@ -15,6 +16,7 @@ const AppContent: React.FC = () => {
           <Route path="/mainPage" element={<MainFormPage/>}/>
           <Route path="/register" element={<SignUp/>}/>
           <Route path="/recommended" element={<RecommendedPlantsPage/>}/>
+          <Route path="/plant-details" element={<PlantDetailsPage/>}/>
       </Routes>
         </>
   )

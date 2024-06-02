@@ -1,0 +1,100 @@
+package rules.backward;
+
+import com.ftn.sbnz.model.Plant;
+import com.ftn.sbnz.model.enums.PlantType;
+import java.util.Set;
+
+import com.ftn.sbnz.model.Plant;
+import com.ftn.sbnz.model.PerennialPlant;
+import com.ftn.sbnz.model.FloweringPlant;
+import com.ftn.sbnz.model.AnnualPlant;
+import com.ftn.sbnz.model.enums.PlantType;
+import com.ftn.sbnz.model.enums.Climate;
+import com.ftn.sbnz.model.ParentChildBackward;
+import com.ftn.sbnz.model.DTO.RecommendedPlantDTO
+import com.ftn.sbnz.model.DTO.PlantLifespan;
+import com.ftn.sbnz.model.SimilarPlant;
+
+global Set<RecommendedPlantDTO> recommendations;
+
+query isContainedIn( String x, String y )
+  $plant: ParentChildBackward( x, y; )
+  or
+  ( $plant: ParentChildBackward( z, y; ) and isContainedIn( x, z; ) )
+end
+
+
+
+rule "Preporuci mi slicne visegodisnje cvetnice  Level 1"
+    agenda-group "level1"
+when
+    $s: SimilarPlant($name: name)
+    $f: FloweringPlant($f.name != $name)
+    not RecommendedPlantDTO( name == $f.name, plantLifespan == PlantLifespan.PERENNIAL)
+    isContainedIn($name, "FloweringPlant";)
+then
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($f.getId());
+    recommendedPlant.setName($f.getName());
+    recommendedPlant.setLightHoursNeeded($f.getLightHoursNeeded());
+    recommendedPlant.setHeight($f.getHeight());
+    recommendedPlant.setPlantType($f.getPlantType());
+    recommendedPlant.setPlantLifespan(PlantLifespan.PERENNIAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+
+end
+
+
+rule "Preporuci mi slicne visegodisnje necvetajuce Level 2"
+ agenda-group "level2"
+when
+    $s: SimilarPlant($name: name)
+    $f: PerennialPlant($f.name != $name)
+    not RecommendedPlantDTO( name == $f.name, plantLifespan == PlantLifespan.PERENNIAL)
+    isContainedIn($name, "PerennialPlant";)
+then
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($f.getId());
+    recommendedPlant.setName($f.getName());
+    recommendedPlant.setPlantType($f.getPlantType());
+    recommendedPlant.setLightHoursNeeded($f.getLightHoursNeeded());
+    recommendedPlant.setHeight($f.getHeight());
+    recommendedPlant.setPlantLifespan(PlantLifespan.PERENNIAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+end
+
+
+
+rule "Preporuci mi slicne visegodisnje Level 3"
+    agenda-group "level3"
+when
+    $s: SimilarPlant($name: name)
+    $f: Plant($f.name != $name)
+    not RecommendedPlantDTO( name == $f.name, plantLifespan == PlantLifespan.PERENNIAL)
+    isContainedIn($name, "Plant";)
+then
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($f.getId());
+    recommendedPlant.setName($f.getName());
+    recommendedPlant.setPlantType($f.getPlantType());
+    recommendedPlant.setLightHoursNeeded($f.getLightHoursNeeded());
+    recommendedPlant.setHeight($f.getHeight());
+    recommendedPlant.setPlantLifespan(PlantLifespan.PERENNIAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
