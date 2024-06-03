@@ -45,4 +45,9 @@ public class PlantAdviceController {
     public ResponseEntity<RecommendedPlantsForAlarms> recommendPlantForWeatherCondition() {
         return new ResponseEntity<>(this.plantAdviceService.getPlantForWeatherCondition(),HttpStatus.OK);
     }
+
+    @GetMapping("/optimal-sowing-plants")
+    public ResponseEntity<RecommendedPlantsForAlarms> recommendPlantsForSowing() {
+        return new ResponseEntity<>(this.plantAdviceService.getPlantsForSowing(), HttpStatus.OK);
+    }
 }

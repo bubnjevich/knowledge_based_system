@@ -9,6 +9,13 @@
         <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
     </kbase>
 
+    <kbase name="cepConfigKbase2" eventProcessingMode="stream" packages="cep2">
+        <ksession name="cepConfigKsessionPseudoClock2" clockType="pseudo"/>
+        <ksession name="cepConfigKsessionRealtimeClock2" clockType="realtime"/>
+
+    </kbase>
+
+
     <kbase name="backwardKBase" eventProcessingMode="stream" packages="backward">
         <ksession name="backwardSession"/>
     </kbase>

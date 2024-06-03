@@ -1,4 +1,5 @@
-package rules.cep;
+package rules.cep2;
+
 import com.ftn.sbnz.model.WeatherCondition;
 import java.time.LocalDate;
 import java.util.List;
@@ -13,12 +14,14 @@ import com.ftn.sbnz.model.DTO.PlantLifespan
 import java.util.Set
 import com.ftn.sbnz.model.PerennialPlant;
 import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
+import com.ftn.sbnz.model.AnnualPlant;
 
 
 global Set<RecommendedPlantDTO> recommendations;
 global RecommendedPlantsForAlarms recommendationsForAlarms;
 
-rule "Detect drought conditions"
+
+rule "Detect optimal sowing conditions"
 when
     $conditions: List() from accumulate(
         WeatherCondition($date: measurementDate, $temperature: temperature, $precipitation: precipitation)
@@ -33,33 +36,36 @@ when
         WeatherCondition($precipitation: precipitation) over window:time(5d),
         average($precipitation)
     )
-    eval($averageTemperature > 28.0)
-    eval($averagePrecipitation < 5.0)
+    eval($averageTemperature >= 15.0 && $averageTemperature <= 25.0)
+    eval($averagePrecipitation >= 20.0 && $averagePrecipitation <= 100.0)
 then
-    Alarm droughtAlarm = new Alarm();
-    System.out.println("Drought detected");
-    droughtAlarm.setType(AlarmType.DROUGHT);
-    droughtAlarm.setMessage("Potential drought detected based on the last 5 days of weather data.");
-    insert(droughtAlarm);
+    System.out.println($averageTemperature);
+    System.out.println($averagePrecipitation);
+    Alarm optimalPlantingConditionsAlarm = new Alarm();
+    optimalPlantingConditionsAlarm.setType(AlarmType.OPTIMAL_PLANTING_CONDITIONS);
+    System.out.println("Optimal weather conditions detected for sowing based on the last 10 days of weather data.");
+    optimalPlantingConditionsAlarm.setMessage("Optimal weather conditions detected for sowing based on the last 10 days of weather data.");
+    insert(optimalPlantingConditionsAlarm);
 end
 
-rule "Analyze soil moisture after detecting drought"
+rule "Analyze soil moisture after detecting optimal sowing conditions"
 when
-    $droughtAlarm: Alarm(type == AlarmType.DROUGHT)
-    $soilMoisture: SoilMoisture(moistureLevel < 20.0) over window:time(1d)  // prag vlažnosti
+    $optimalPlantingConditionsAlarm: Alarm(type == AlarmType.OPTIMAL_PLANTING_CONDITIONS)
+    $soilMoisture: SoilMoisture(moistureLevel >= 20.0 && moistureLevel <= 80.0) over window:time(1d)
 then
-    System.out.println("Drough is in garden!");
-    Alarm moistureAlarm = new Alarm(AlarmType.LOW_SOIL_MOISTURE, "Soil moisture is below threshold. Recommend drought-resistant plants.");
+    System.out.println("Soil moisture level is optimal. Proceed with planting.");
+    Alarm moistureAlarm = new Alarm(AlarmType.OPTIMAL_SOIL_MOISTURE, "Soil moisture level is optimal. Proceed with planting.");
     insert(moistureAlarm);
 end
 
-
-rule "Recommend drought-resistant plants"
+rule "Recommend plants for optimal sowing conditions"
 when
-    $recommendation: Alarm(type == AlarmType.LOW_SOIL_MOISTURE)
-    $plant: Plant(plantFunctionalities contains PlantFunctionality.DROUGHT_RESISTANCE)
-then
+    $recommendation: Alarm(type == AlarmType.OPTIMAL_SOIL_MOISTURE)
+    $plant: AnnualPlant()
+    not RecommendedPlantDTO( name == $plant.name)
 
+then
+    System.out.println("Soil moisture level is optimal. Proceed with planting.");
     RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
     recommendedPlant.setId($plant.getId());
     recommendedPlant.setName($plant.getName());
@@ -68,7 +74,7 @@ then
     recommendedPlant.setFunctionalities($plant.getPlantFunctionalities());
     recommendedPlant.setLightHoursNeeded($plant.getLightHoursNeeded());
     recommendedPlant.setSuitableSoils($plant.getSuitableSoilTypes());
-    recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+    recommendedPlant.setPlantLifespan(PlantLifespan.ANNUAL);
     recommendationsForAlarms.getRecommendedPlants().add(recommendedPlant);
     recommendations.add(recommendedPlant);
     insert(recommendedPlant);

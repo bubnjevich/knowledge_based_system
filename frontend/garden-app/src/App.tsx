@@ -12,6 +12,7 @@ import {RootState} from "./auth/store";
 import ButtonAppBar from "./components/ButtonAppBar";
 import AlarmsDetailsPage from "./components/pages/AlarmsDetailsPage";
 import RecommendedPlantsForClimate from "./components/pages/RecommendedPlantsForClimate";
+import AlarmSowingDetailsPage from "./components/pages/AlarmSowingDetailsPage";
 
 
 const AppContent: React.FC = () => {
@@ -33,7 +34,8 @@ const AppContent: React.FC = () => {
           <Route path="/register" element={<SignUp/>}/>
           <Route path="/recommended" element={<RecommendedPlantsPage/>}/>
           <Route path="/plant-details" element={<PlantDetailsPage/>}/>
-          <Route path="/alarms" element={<AlarmsDetailsPage/>}/>
+            <Route path="/alarms" element={<AlarmsDetailsPage />} />
+            <Route path="/sowing" element={<AlarmSowingDetailsPage/>} />
             <Route path="/climate" element={<RecommendedPlantsForClimate/>}/>
 
         </Routes>

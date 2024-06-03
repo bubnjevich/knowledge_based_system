@@ -3,6 +3,7 @@ package com.ftn.sbnz.service.tests;
 
 import com.ftn.sbnz.model.*;
 import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
+import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
 import com.ftn.sbnz.model.enums.Climate;
 import com.ftn.sbnz.model.enums.PlantFunctionality;
 import com.ftn.sbnz.model.enums.PlantType;
@@ -65,21 +66,19 @@ public class PlantRepositoryTest {
 
 
         SessionPseudoClock clock = ksession.getSessionClock();
+        RecommendedPlantsForAlarms r = new RecommendedPlantsForAlarms();
+        ksession.setGlobal("recommendationsForAlarms", r);
+
 
         // Insert weather conditions
-        ksession.insert(new WeatherCondition("2024-05-15", 30.0, 1.0)); // Day 1
-        clock.advanceTime(1, TimeUnit.DAYS);
-        ksession.insert(new WeatherCondition("2024-05-16", 31.0, 2.0)); // Day 2
-        clock.advanceTime(1, TimeUnit.DAYS);
-        ksession.insert(new WeatherCondition("2024-05-17", 29.0, 0.5)); // Day 3
-        clock.advanceTime(1, TimeUnit.DAYS);
-        ksession.insert(new WeatherCondition("2024-05-18", 32.0, 1.5)); // Day 4
-        clock.advanceTime(1, TimeUnit.DAYS);
-        ksession.insert(new WeatherCondition("2024-05-19", 33.0, 0.5)); // Day 5
-        clock.advanceTime(1, TimeUnit.DAYS);
+        ksession.insert(new WeatherCondition("2024-06-27", 30.0, 1.0)); // Day 1
+        ksession.insert(new WeatherCondition("2024-06-28", 31.0, 2.0)); // Day 2
+        ksession.insert(new WeatherCondition("2024-06-29", 29.0, 0.5)); // Day 3
+        ksession.insert(new WeatherCondition("2024-06-30", 32.0, 1.5)); // Day 4
+        ksession.insert(new WeatherCondition("2024-07-01", 33.0, 0.5)); // Day 5
 
-        ksession.insert(new SoilMoisture("2024-05-19",18.0));
-        clock.advanceTime(1, TimeUnit.HOURS);
+
+        ksession.insert(new SoilMoisture("2024-06-02",18.0));
 
         ksession.fireAllRules();
 

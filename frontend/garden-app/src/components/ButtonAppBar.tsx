@@ -24,13 +24,6 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ setIsLoggedIn }) => {
         navigate("/mainPage")
     }
 
-    const handleAlarms = () => {
-        navigate("/alarms")
-    }
-
-    const handleForm = () => {
-        navigate("/climate")
-    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -41,11 +34,15 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ setIsLoggedIn }) => {
                         Main Page
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ marginLeft: 2,  color: 'purple', cursor: 'pointer'}}
-                                onClick={handleAlarms}>
+                                onClick={() => navigate("/alarms")}>
                         Alarms
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ marginLeft: 2,  color: 'purple', cursor: 'pointer'}}
-                                onClick={handleForm}>
+                                onClick={() => navigate("/sowing")}>
+                        Sowing
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ marginLeft: 2,  color: 'purple', cursor: 'pointer'}}
+                                onClick={() => navigate("/climate")}>
                         Garden
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />

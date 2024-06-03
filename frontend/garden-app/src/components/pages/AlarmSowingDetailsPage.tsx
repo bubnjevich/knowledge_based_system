@@ -6,12 +6,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Slider from 'react-slick';
-import Select, {SelectChangeEvent} from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import {
     fetchPlantImage,
-    fetchRecommendedPlants,
-    fetchAlarmsPlants,
     fetchAlarmsPlantsForSowing
 } from "../../services/PlantAdviceService";
 import "slick-carousel/slick/slick.css";
@@ -25,7 +21,7 @@ interface Props {
     stringValue: string; // Eksplicitno navođenje tipa propertija
 }
 
-export const AlarmDetailsPage = () => {
+export const AlarmSowingDetailsPage= ()=> {
     const [recommendedPlants, setRecommendedPlants] = useState<RecommendedPlant[]>([]);
     const [plantImages, setPlantImages] = useState<{ [key: string]: string }>({});
     const [alarmMessage, setAlarmMessage] = useState<string>("");
@@ -35,9 +31,7 @@ export const AlarmDetailsPage = () => {
     useEffect(() => {
         const fetchRecommended = async () => {
             setIsLoading(true);
-
-            const plants = await fetchAlarmsPlants();
-
+            const plants = await fetchAlarmsPlantsForSowing();
             setRecommendedPlants(plants.recommendedPlants);
             setAlarmMessage(plants.alarmMessage);
             setAlarmType(plants.alarmType);
@@ -98,7 +92,7 @@ export const AlarmDetailsPage = () => {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: 2 }}>
                     <Card sx={{ display: 'flex', backgroundColor: 'rgba(255, 255, 255, 0.8)', maxWidth: '1000px', marginBottom: 4 }}>
                         <Box sx={{ width: 200, height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                            <Warning sx={{ fontSize: 100, color: 'red' }} />
+                         <Grass sx={{ fontSize: 100, color: 'green' }} />   
                         </Box>
                         <CardContent sx={{ textAlign: 'left', padding: 2 }}>
                             <Typography variant="h4" component="h1" gutterBottom>
@@ -109,7 +103,7 @@ export const AlarmDetailsPage = () => {
                     <>
                         <Box sx={{ width: '70%', height: '40%' }}>
                             <Typography variant="h5" component="h2" gutterBottom>
-                                We recommend drought-resistant plants
+                                Plants we recommend for sowing
                             </Typography>
                             <Slider {...settings}>
                                 {recommendedPlants.map((plant: RecommendedPlant) => (
@@ -155,4 +149,4 @@ export const AlarmDetailsPage = () => {
         </div>
     );
 };
-export default AlarmDetailsPage;
+export default AlarmSowingDetailsPage;

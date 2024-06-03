@@ -157,6 +157,50 @@ public class PlantAdviceService implements IPlantAdviceService {
         return kieHelper.build().newKieSession();
     }
 
+    @Override
+    public RecommendedPlantsForAlarms getPlantsForSowing() {
+        System.out.println("started sowing!");
+        KieServices ks = KieServices.Factory.get();
+        KieContainer kc = ks.newKieClasspathContainer();
+        KieSession kieSession = kc.newKieSession("cepConfigKsessionPseudoClock2");
+        RecommendedPlantsForAlarms recommendedPlantsForAlarms = new RecommendedPlantsForAlarms();
+
+        List<AnnualPlant> annualPlants = annualPlantRepository.findAll();
+
+        for (AnnualPlant p : annualPlants) {
+            kieSession.insert(p);
+        }
+
+        Set<RecommendedPlantDTO> recommendations = new HashSet<>();
+        kieSession.setGlobal("recommendations", recommendations);
+        kieSession.setGlobal("recommendationsForAlarms", recommendedPlantsForAlarms);
+
+        SessionPseudoClock clock = kieSession.getSessionClock();
+
+        List<WeatherCondition> weatherConditions = weatherConditionService.getLastSixWeatherConditionsSortedByDate();
+
+        for (WeatherCondition weatherCondition : weatherConditions) {
+            System.out.println(weatherCondition.getmeasurementDate());
+            kieSession.insert(weatherCondition);
+            clock.advanceTime(1, TimeUnit.DAYS);
+        }
+
+        List<SoilMoisture> soilMoistureList = soilMoistureRepository.findAllByOrderByMeasurementDateAsc();
+
+        for (SoilMoisture soilMoisture : soilMoistureList) {
+            kieSession.insert(soilMoisture);
+        }
+        kieSession.fireAllRules();
+        if (!recommendedPlantsForAlarms.getRecommendedPlants().isEmpty()) {
+            recommendedPlantsForAlarms.setAlarmMessage("Optimal weather conditions detected for sowing based on the last 10 days of weather data.");
+            recommendedPlantsForAlarms.setAlarmType(AlarmType.OPTIMAL_PLANTING_CONDITIONS);
+        } else {
+            recommendedPlantsForAlarms.setAlarmMessage("There is no optimal weather for sowing");
+
+        }
+
+        return recommendedPlantsForAlarms;
+    }
 
     @Override
     public RecommendedPlantsForAlarms getPlantForWeatherCondition() {
@@ -187,34 +231,20 @@ public class PlantAdviceService implements IPlantAdviceService {
 
         SessionPseudoClock clock = kieSession.getSessionClock();
 
-        List<WeatherCondition> weatherConditions = weatherConditionService.getAllWeatherConditionsSortedByDate();
-        LocalDate currentDate = LocalDate.now();
-        LocalDate previousDate = currentDate;
+        List<WeatherCondition> weatherConditions = weatherConditionService.getLastSixWeatherConditionsSortedByDate();
 
         for (WeatherCondition weatherCondition : weatherConditions) {
-            kieSession.insert(weatherCondition);
-            System.out.println(previousDate);
             System.out.println(weatherCondition.getmeasurementDate());
 
-            long daysDifference = ChronoUnit.DAYS.between(weatherCondition.getmeasurementDate(), currentDate);
-            System.out.println("daysDifference: " + daysDifference);
-
-            clock.advanceTime(daysDifference, TimeUnit.DAYS);
-
-            previousDate = weatherCondition.getmeasurementDate();
+            kieSession.insert(weatherCondition);
+            clock.advanceTime(1, TimeUnit.DAYS);
         }
 
         List<SoilMoisture> soilMoistureList = soilMoistureRepository.findAllByOrderByMeasurementDateAsc();
-         previousDate = currentDate;
 
         for (SoilMoisture soilMoisture : soilMoistureList) {
             kieSession.insert(soilMoisture);
 
-            long daysDifference = ChronoUnit.DAYS.between(previousDate, currentDate);
-
-            clock.advanceTime(daysDifference, TimeUnit.DAYS);
-
-            previousDate = soilMoisture.getmeasurementDate();
         }
 
 

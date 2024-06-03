@@ -162,8 +162,6 @@ function boolean checkFunctionalitiesForClimate(AdviceRequestForTempDTO request,
 }
 
 
-
-
 function boolean checkPlantType(AdviceRequestDTO request, Plant plant) {
     return request.getPlantType() == null || request.getPlantType().equals(plant.getPlantType());
 }

@@ -13,6 +13,6 @@ public interface IPlantAdviceService {
     public Set<RecommendedPlantDTO> getSimilarPlantWithSpecificLevel(SimilarPlant similarPlant);
 
     public RecommendedPlantsForAlarms getPlantForWeatherCondition();
-
+    public RecommendedPlantsForAlarms getPlantsForSowing();
     public Set<RecommendedPlantDTO> recommendPlantsForSpecificClimates(AdviceRequestForTempDTO dto);
 }

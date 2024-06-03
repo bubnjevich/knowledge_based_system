@@ -64,6 +64,20 @@ export const fetchAlarmsPlants = async () : Promise<RecommendedPlantsForAlarms> 
     }
 }
 
+
+export const fetchAlarmsPlantsForSowing = async () : Promise<RecommendedPlantsForAlarms> => {
+    try {
+        const response = await axiosInstance.get(`${API_BASE_URL}/advices/optimal-sowing-plants`);
+        console.log(response.data);
+        return response.data;
+
+    } catch (e) {
+        console.log("Error getting alarms: ", e)
+        throw e;
+    }
+}
+
+
 const UNSPLASH_ACCESS_KEY = 'kwskgXdQvRPKEc6RmJExM_ZhuMhDLXN9u6dmRzsX9IY'; // Replace with your Unsplash Access Key
 
 export const fetchPlantImage = async (plantName: string): Promise<string> => {
