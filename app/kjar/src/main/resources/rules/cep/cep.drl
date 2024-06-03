@@ -12,10 +12,11 @@ import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
 import com.ftn.sbnz.model.DTO.PlantLifespan
 import java.util.Set
 import com.ftn.sbnz.model.PerennialPlant;
-
+import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
 
 
 global Set<RecommendedPlantDTO> recommendations;
+global RecommendedPlantsForAlarms recommendationsForAlarms;
 
 
 rule "Detect drought conditions"
@@ -61,7 +62,13 @@ then
     RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
     recommendedPlant.setId($plant.getId());
     recommendedPlant.setName($plant.getName());
+    recommendedPlant.setHeight($plant.getHeight());
+    recommendedPlant.setPlantType($plant.getPlantType());
+    recommendedPlant.setFunctionalities($plant.getPlantFunctionalities());
+    recommendedPlant.setLightHoursNeeded($plant.getLightHoursNeeded());
+    recommendedPlant.setSuitableSoils($plant.getSuitableSoilTypes());
     recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+    recommendationsForAlarms.getRecommendedPlants().add(recommendedPlant);
     recommendations.add(recommendedPlant);
     insert(recommendedPlant);
 end

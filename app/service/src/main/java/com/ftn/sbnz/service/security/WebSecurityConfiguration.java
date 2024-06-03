@@ -43,6 +43,7 @@ public class WebSecurityConfiguration {
                 .antMatchers("/api/user/login").permitAll()
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers("/api/unregisteredUser/").permitAll()
+                .antMatchers("/api/weather-conditions").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

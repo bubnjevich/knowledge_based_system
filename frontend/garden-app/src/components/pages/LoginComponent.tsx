@@ -14,8 +14,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import userService from "../../services/UserService";
 import { useDispatch } from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {setToken} from "../../auth/userSlice";
+import { useNavigate } from "react-router-dom";
+import { setToken } from "../../auth/userSlice";
+
+interface SignInProps {
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 function Copyright(props: any) {
     return (
@@ -30,96 +34,99 @@ function Copyright(props: any) {
     );
 }
 
-export default function SignIn() {
+const SignIn: React.FC<SignInProps> = ({ setIsLoggedIn }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-        const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const loginRequest = {
-                email: formData.get('email') as string,
-                password: formData.get('password') as string
-            }
-            try {
-                const response = await userService.login(loginRequest);
-                localStorage.setItem("token", response.token);
-                dispatch(setToken(response.token));
-
-                console.log(response.token);
-                navigate("/mainPage");
-
-            } catch (error) {
-                console.error('Login failed:', error);
-                alert("Login Failed")
-            }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const loginRequest = {
+            email: formData.get('email') as string,
+            password: formData.get('password') as string
         };
+        try {
+            const response = await userService.login(loginRequest);
+            localStorage.setItem("token", response.token);
+            dispatch(setToken(response.token));
+            setIsLoggedIn(true);  // Postavljanje stanja isLoggedIn na true
+
+            console.log(response.token);
+            navigate("/mainPage");
+
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert("Login Failed");
+        }
+    };
 
     return (
-            <Container component="main" maxWidth="xs"  style={{ background: 'rgba(255, 255, 255, 0.9)' }}>
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="/register" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
+        <Container component="main" maxWidth="xs" style={{ background: 'rgba(255, 255, 255, 0.9)' }}>
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Sign In
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                Forgot password?
+                            </Link>
                         </Grid>
-                    </Box>
+                        <Grid item>
+                            <Link href="/register" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </Box>
-                <Copyright sx={{ mt: 8, mb: 4 }} />
-            </Container>
+            </Box>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+        </Container>
     );
 }
+
+export default SignIn;

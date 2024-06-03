@@ -2,6 +2,7 @@ package com.ftn.sbnz.service.controllers;
 
 import com.ftn.sbnz.model.DTO.AdviceRequestDTO;
 import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
+import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
 import com.ftn.sbnz.model.SimilarPlant;
 import com.ftn.sbnz.service.services.interfaces.IPlantAdviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class PlantAdviceController {
     public ResponseEntity<Set<RecommendedPlantDTO>> recommendSimilarPlant(@RequestBody SimilarPlant similarPlant) {
         System.out.println(similarPlant);
         return new ResponseEntity<>(this.plantAdviceService.getSimilarPlantWithSpecificLevel(similarPlant), HttpStatus.OK);
+    }
+
+    @GetMapping("/drought-resistance-alarms")
+    public ResponseEntity<RecommendedPlantsForAlarms> recommendPlantForWeatherCondition() {
+        return new ResponseEntity<>(this.plantAdviceService.getPlantForWeatherCondition(),HttpStatus.OK);
     }
 }

@@ -1,7 +1,7 @@
 import {AdviceRequest} from "../model/User/Advice/AdviceRequest";
 import axios from "axios";
 import axiosInstance from "../interceptor/axiosSetup";
-import {RecommendedPlant} from "../model/RecommendedPlant";
+import {RecommendedPlant, RecommendedPlantsForAlarms} from "../model/RecommendedPlant";
 const API_BASE_URL: string | undefined = process.env.REACT_APP_API_BASE_URL;
 
 export const submitPlantData = async (plantData: AdviceRequest): Promise<RecommendedPlant[]> => {
@@ -33,6 +33,18 @@ export const fetchRecommendedPlants = async (): Promise<RecommendedPlant[]> => {
         return response.data;
     } catch (e) {
         console.log("Error getting recommended data: ", e)
+        throw e;
+    }
+}
+
+export const fetchAlarmsPlants = async () : Promise<RecommendedPlantsForAlarms> => {
+    try {
+        const response = await axiosInstance.get(`${API_BASE_URL}/advices/drought-resistance-alarms`);
+        console.log(response.data);
+        return response.data;
+
+    } catch (e) {
+        console.log("Error getting alarms: ", e)
         throw e;
     }
 }
