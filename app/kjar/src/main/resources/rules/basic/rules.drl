@@ -15,6 +15,7 @@ import java.util.Set;
 import com.ftn.sbnz.model.DTO.PlantLifespan
 import java.util.List
 import java.util.stream.Collectors
+import com.ftn.sbnz.model.DTO.AdviceRequestForTempDTO;
 
 global Set<RecommendedPlantDTO> recommendations;
 
@@ -74,6 +75,95 @@ then
     insert(recommendedPlant);
 end
 
+
+
+rule "Preporuci mi biljke sa odredjenom klimom i bilo bojom cveta"
+when
+     $adviceRequest : AdviceRequestForTempDTO($flowerColor: flowerColor)
+     $plant: Plant()
+
+    eval(checkPlantTypeForClimate($adviceRequest, $plant) &&
+         checkLightHoursNeededForClimate($adviceRequest, $plant) &&
+         checkFunctionalitiesForClimate($adviceRequest, $plant) &&
+         checkSuitableClimate($adviceRequest, $plant) &&
+         $flowerColor == null
+
+         )
+then
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($plant.getId());
+    recommendedPlant.setName($plant.getName());
+    recommendedPlant.setHeight($plant.getHeight());
+    recommendedPlant.setPlantType($plant.getPlantType());
+    recommendedPlant.setFunctionalities($plant.getPlantFunctionalities());
+    recommendedPlant.setLightHoursNeeded($plant.getLightHoursNeeded());
+    recommendedPlant.setSuitableSoils($plant.getSuitableSoilTypes());
+    recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+end
+
+
+
+
+
+rule "Preporuci mi biljke sa odredjenom klimom"
+when
+     $adviceRequest : AdviceRequestForTempDTO()
+     $plant: FloweringPlant($flowerColor: flowerColor)
+
+    eval(checkPlantTypeForClimate($adviceRequest, $plant) &&
+         checkLightHoursNeededForClimate($adviceRequest, $plant) &&
+         checkFunctionalitiesForClimate($adviceRequest, $plant) &&
+         checkSuitableClimate($adviceRequest, $plant) &&
+         $plant.getFlowerColor() == $adviceRequest.getFlowerColor() && $adviceRequest.getFlowerColor() != null
+
+         )
+then
+    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
+    recommendedPlant.setId($plant.getId());
+    recommendedPlant.setName($plant.getName());
+    recommendedPlant.setHeight($plant.getHeight());
+    recommendedPlant.setPlantType($plant.getPlantType());
+    recommendedPlant.setFunctionalities($plant.getPlantFunctionalities());
+    recommendedPlant.setLightHoursNeeded($plant.getLightHoursNeeded());
+    recommendedPlant.setSuitableSoils($plant.getSuitableSoilTypes());
+    recommendedPlant.setPlantLifespan($plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
+    recommendations.add(recommendedPlant);
+    insert(recommendedPlant);
+end
+
+
+
+
+
+
+function boolean checkSuitableClimate(AdviceRequestForTempDTO request, Plant plant) {
+    System.out.println("request climates: " + request.getClimates());
+    List<String> suitableClimates = plant.getSuitableClimates().stream().map(Climate::toString).toList();
+    System.out.println("suitableClimates for " + plant.getName() + " " + suitableClimates);
+    boolean a = request.getClimates() == null || request.getClimates().isEmpty() || request.getClimates().stream().anyMatch(suitableClimates::contains);
+    System.out.println(a);
+    return a;
+}
+
+
+
+function boolean checkPlantTypeForClimate(AdviceRequestForTempDTO request, Plant plant) {
+    return request.getPlantType() == null || request.getPlantType().equals(plant.getPlantType());
+}
+
+function boolean checkLightHoursNeededForClimate(AdviceRequestForTempDTO request, Plant plant) {
+    return request.getLightHoursNeeded() == 0 || request.getLightHoursNeeded() == plant.getLightHoursNeeded();
+}
+
+function boolean checkFunctionalitiesForClimate(AdviceRequestForTempDTO request, Plant plant) {
+    return request.getPlantFunctionality().isEmpty() || plant.getPlantFunctionalities().containsAll(request.getPlantFunctionality());
+}
+
+
+
+
 function boolean checkPlantType(AdviceRequestDTO request, Plant plant) {
     return request.getPlantType() == null || request.getPlantType().equals(plant.getPlantType());
 }
@@ -82,11 +172,13 @@ function boolean checkLightHoursNeeded(AdviceRequestDTO request, Plant plant) {
     return request.getLightHoursNeeded() == 0 || request.getLightHoursNeeded() == plant.getLightHoursNeeded();
 }
 
-function boolean checkSoilType(AdviceRequestDTO request, Plant plant) {
+function  boolean checkSoilType(AdviceRequestDTO request, Plant plant) {
 
-   List<String> requestedSoilTypes = request.getSoilType();
-    List<String> plantSoilTypes = plant.getSuitableSoilTypes().stream().map(Soil::getSoilType).collect(Collectors.toList());
-    return requestedSoilTypes == null || requestedSoilTypes.isEmpty() || plantSoilTypes.containsAll(requestedSoilTypes);
+    List<String> requestedSoilTypes = request.getSoilType();
+    List<String> plantSoilTypes = plant.getSuitableSoilTypes().stream().map(Soil::getSoilType).toList();
+
+    return requestedSoilTypes == null || requestedSoilTypes.isEmpty() ||
+           requestedSoilTypes.stream().anyMatch(plantSoilTypes::contains);
 }
 
 function boolean checkFunctionalities(AdviceRequestDTO request, Plant plant) {

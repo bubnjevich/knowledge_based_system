@@ -6,46 +6,47 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
-import Select, {SelectChangeEvent} from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { Grass } from "@mui/icons-material";
-import {AdviceRequest, PlantType} from "../../model/User/Advice/AdviceRequest";
-import {submitPlantData} from "../../services/PlantAdviceService";
-import {useNavigate} from "react-router-dom";
+import { AdviceRequest } from "../../model/User/Advice/AdviceRequest";
+import {submitPlantData, submitPlantDataWithClimateConditions} from "../../services/PlantAdviceService";
+import { useNavigate } from "react-router-dom";
+import {AdviceRequestWithTemp} from "../../model/User/Advice/AdviceRequestWithTemp";
 
 const plantTypes = ["TREE", "SHRUB", "FLOWER", "HERB"];
 const soilTypes = ["SANDY", "LOAMY", "CLAY", "PEAT", "CHALKY"];
 const functionalities = ["DECORATIVE", "EDIBLE", "POLLINATOR", "SHADE_PROVIDER", "FRAGRANT", "DROUGHT_RESISTANCE", "SPICE"];
 const flowerColors = ["RED", "BLUE", "YELLOW", "PURPLE", "WHITE", "GREEN", "PINK"];
 
-export default function MainFormPage() {
+export default function RecommendedPlantsForClimate() {
     const [plantType, setPlantType] = React.useState<string | null>(null);
     const [soilType, setSoilType] = React.useState<string[]>([]);
     const [lightHours, setLightHours] = React.useState<number>(0);
     const [selectedFunctionalities, setSelectedFunctionalities] = React.useState<string[]>([]);
     const [selectedColor, setSelectedColor] = React.useState<string | null>(null);
     const [soilPh, setSoilPh] = React.useState<number>(0);
+    const [minTemp, setMinTemp] = React.useState<number | null>(null);
+    const [maxTemp, setMaxTemp] = React.useState<number | null>(null);
 
-    const [formData, setFormData] = React.useState<AdviceRequest>({
+    const navigate = useNavigate();
+
+    const formData: AdviceRequestWithTemp = {
         plantType: plantType,
-        soilType: soilType,
         lightHoursNeeded: lightHours,
         plantFunctionality: selectedFunctionalities,
         flowerColor: selectedColor,
-        soilPh: soilPh
-    });
-    const navigate = useNavigate();
+        minTemperature: minTemp,
+        maxTemperature: maxTemp,
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(formData);
         try {
-            const recommended = await submitPlantData(formData);
+            const recommended = await submitPlantDataWithClimateConditions(formData);
             navigate('/recommended', { state: { recommendedPlants: recommended } });
-
         } catch (error) {
             alert('Failed to submit data');
         }
@@ -66,7 +67,7 @@ export default function MainFormPage() {
                     <Grass />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Plant Recommendation
+                    Environmental Conditions Form
                 </Typography>
                 <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
                     <FormControl fullWidth margin="normal">
@@ -78,10 +79,6 @@ export default function MainFormPage() {
                             onChange={(e) => {
                                 const selectedValues = e.target.value as string;
                                 setPlantType(selectedValues);
-                                setFormData({
-                                    ...formData,
-                                    plantType: selectedValues
-                                });
                             }}
                             label="Plant Type"
                         >
@@ -99,30 +96,38 @@ export default function MainFormPage() {
                         label="Garden exposure to the sun"
                         type="number"
                         value={lightHours}
-                        onChange={(e) => {
-                            setLightHours(Number(e.target.value));
-
-                            setFormData({
-                                ...formData,
-                                lightHoursNeeded: Number(e.target.value)
-                            })
-                        }}
+                        onChange={(e) => setLightHours(parseInt(e.target.value))}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="min-temp"
+                        label="Minimum Temperature"
+                        type="number"
+                        inputProps={{ step: 0.1 }}
+                        value={minTemp ?? ""}
+                        onChange={(e) => setMinTemp(parseFloat(e.target.value))}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="max-temp"
+                        label="Maximum Temperature"
+                        type="number"
+                        inputProps={{ step: 0.1 }}
+                        value={maxTemp ?? ""}
+                        onChange={(e) => setMaxTemp(parseFloat(e.target.value))}
                     />
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="functionalities-label">Plant Functionality</InputLabel>
                         <Select
                             labelId="functionalities-label"
                             id="functionalities"
-                            multiple={true}
+                            multiple
                             value={selectedFunctionalities}
-                            onChange={(e) => {
-                                const selectedValues = e.target.value as string[];
-                                setSelectedFunctionalities(selectedValues);
-                                setFormData({
-                                    ...formData,
-                                    plantFunctionality: selectedValues
-                                });
-                            }}
+                            onChange={(e) => setSelectedFunctionalities(e.target.value as string[])}
                         >
                             {functionalities.map((func) => (
                                 <MenuItem key={func} value={func}>{func}</MenuItem>
@@ -135,36 +140,14 @@ export default function MainFormPage() {
                             labelId="flower-colors-label"
                             id="flower-colors"
                             value={selectedColor}
-                            onChange={(e) => {
-                                setSelectedColor(e.target.value)
-                                setFormData({
-                                    ...formData,
-                                    flowerColor: e.target.value
-                                });
-
-                            }}
+                            onChange={(e) => setSelectedColor(e.target.value)}
                         >
                             {flowerColors.map((color) => (
                                 <MenuItem key={color} value={color}>{color}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="soil-ph"
-                        label="Soil pH"
-                        type="number"
-                        value={soilPh}
-                        onChange={(e) => {setSoilPh(Number(e.target.value))
 
-                            setFormData({
-                                ...formData,
-                                soilPh: Number(e.target.value)
-                            });
-                        }}
-                    />
                     <Button
                         type="submit"
                         fullWidth

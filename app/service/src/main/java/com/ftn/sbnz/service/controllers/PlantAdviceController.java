@@ -1,6 +1,7 @@
 package com.ftn.sbnz.service.controllers;
 
 import com.ftn.sbnz.model.DTO.AdviceRequestDTO;
+import com.ftn.sbnz.model.DTO.AdviceRequestForTempDTO;
 import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
 import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
 import com.ftn.sbnz.model.SimilarPlant;
@@ -32,6 +33,12 @@ public class PlantAdviceController {
     public ResponseEntity<Set<RecommendedPlantDTO>> recommendSimilarPlant(@RequestBody SimilarPlant similarPlant) {
         System.out.println(similarPlant);
         return new ResponseEntity<>(this.plantAdviceService.getSimilarPlantWithSpecificLevel(similarPlant), HttpStatus.OK);
+    }
+
+    @PutMapping("/fullInfoClimate")
+    public ResponseEntity<Set<RecommendedPlantDTO>> recommendPlantsForSpecificClimate(@RequestBody AdviceRequestForTempDTO dto) {
+        System.out.println(dto);
+        return new ResponseEntity<>(this.plantAdviceService.recommendPlantsForSpecificClimates(dto), HttpStatus.OK);
     }
 
     @GetMapping("/drought-resistance-alarms")

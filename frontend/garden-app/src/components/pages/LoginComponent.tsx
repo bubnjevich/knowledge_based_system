@@ -62,7 +62,7 @@ const SignIn: React.FC<SignInProps> = ({ setIsLoggedIn }) => {
 
     return (
         <Container component="main" maxWidth="xs" style={{ background: 'rgba(255, 255, 255, 0.9)' }}>
-            <CssBaseline />
+
             <Box
                 sx={{
                     marginTop: 8,

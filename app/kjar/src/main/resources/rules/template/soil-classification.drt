@@ -15,7 +15,6 @@ import com.ftn.sbnz.model.FloweringPlant;
 import com.ftn.sbnz.model.DTO.PlantLifespan;
 import java.util.Set;
 
-global Set<RecommendedPlantDTO> recommendations;
 
 template "classification-rules"
 
@@ -23,16 +22,11 @@ rule "Ako je zemljiste u basti ispod @{maxPh} i iznad @{minPh} preporuci bilje p
 no-loop true
 when
     $$advice: AdviceRequestDTO(soilPh > @{minPh}, soilPh <= @{maxPh})
-    $$plant: Plant($$suitableSoil: suitableSoilTypes)
-    Soil(soilType == "@{soil}") from $$suitableSoil
-
 then
-    RecommendedPlantDTO recommendedPlant = new RecommendedPlantDTO();
-    recommendedPlant.setId($$plant.getId());
-    recommendedPlant.setName($$plant.getName());
-    recommendedPlant.setPlantLifespan($$plant instanceof PerennialPlant ? PlantLifespan.PERENNIAL : PlantLifespan.ANNUAL);
-    recommendations.add(recommendedPlant);
-    insert(recommendedPlant);
+    modify($$advice) {
+        getSoilType().add("@{soil}");
+  }
+
 end
 
 end template

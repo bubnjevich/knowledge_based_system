@@ -14,17 +14,20 @@ import com.ftn.sbnz.model.AnnualPlant;
 import com.ftn.sbnz.model.FloweringPlant;
 import com.ftn.sbnz.model.DTO.PlantLifespan;
 import java.util.Set;
+import com.ftn.sbnz.model.DTO.AdviceRequestForTempDTO;
 
 global Set<RecommendedPlantDTO> recommendations;
 
 template "climate-classification-rules"
 
-rule "Ako je klima u rangu [@{minTemperature}, @{maxTemperature}] preporuci @climate"
+rule "Ako je klima u rangu [@{minTemperature}, @{maxTemperature}] postavi @{climate}"
+no-loop true
 when
-
-
+    $$request: AdviceRequestForTempDTO(minTemperature >= @{minTemperature}, maxTemperature <= @{maxTemperature})
 then
-
+     modify($$request) {
+            getClimates().add("@{climate}");
+      }
 end
 
 end template

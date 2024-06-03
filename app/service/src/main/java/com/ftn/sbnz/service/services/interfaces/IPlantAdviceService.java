@@ -1,6 +1,7 @@
 package com.ftn.sbnz.service.services.interfaces;
 
 import com.ftn.sbnz.model.DTO.AdviceRequestDTO;
+import com.ftn.sbnz.model.DTO.AdviceRequestForTempDTO;
 import com.ftn.sbnz.model.DTO.RecommendedPlantDTO;
 import com.ftn.sbnz.model.DTO.RecommendedPlantsForAlarms;
 import com.ftn.sbnz.model.SimilarPlant;
@@ -12,4 +13,6 @@ public interface IPlantAdviceService {
     public Set<RecommendedPlantDTO> getSimilarPlantWithSpecificLevel(SimilarPlant similarPlant);
 
     public RecommendedPlantsForAlarms getPlantForWeatherCondition();
+
+    public Set<RecommendedPlantDTO> recommendPlantsForSpecificClimates(AdviceRequestForTempDTO dto);
 }

@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import {RootState} from "./auth/store";
 import ButtonAppBar from "./components/ButtonAppBar";
 import AlarmsDetailsPage from "./components/pages/AlarmsDetailsPage";
+import RecommendedPlantsForClimate from "./components/pages/RecommendedPlantsForClimate";
 
 
 const AppContent: React.FC = () => {
@@ -28,12 +29,14 @@ const AppContent: React.FC = () => {
 
         <Routes>
         <Route path="/" element={<SignIn setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/mainPage" element={<MainFormPage/>}/>
+          <Route path="/mainPage" element={<MainFormPage />}/>
           <Route path="/register" element={<SignUp/>}/>
           <Route path="/recommended" element={<RecommendedPlantsPage/>}/>
           <Route path="/plant-details" element={<PlantDetailsPage/>}/>
           <Route path="/alarms" element={<AlarmsDetailsPage/>}/>
-      </Routes>
+            <Route path="/climate" element={<RecommendedPlantsForClimate/>}/>
+
+        </Routes>
     </>
 
   )
@@ -41,10 +44,10 @@ const AppContent: React.FC = () => {
 
 const App = () => {
   return (
-      <div className="App">
-        <GlobalStyles/>
-        <Router>
+      <div className="App" >
 
+
+        <Router>
             <AppContent/>
         </Router>
 

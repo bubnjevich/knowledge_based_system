@@ -2,6 +2,7 @@ import {AdviceRequest} from "../model/User/Advice/AdviceRequest";
 import axios from "axios";
 import axiosInstance from "../interceptor/axiosSetup";
 import {RecommendedPlant, RecommendedPlantsForAlarms} from "../model/RecommendedPlant";
+import {AdviceRequestWithTemp} from "../model/User/Advice/AdviceRequestWithTemp";
 const API_BASE_URL: string | undefined = process.env.REACT_APP_API_BASE_URL;
 
 export const submitPlantData = async (plantData: AdviceRequest): Promise<RecommendedPlant[]> => {
@@ -16,6 +17,20 @@ export const submitPlantData = async (plantData: AdviceRequest): Promise<Recomme
         throw error;
     }
 };
+
+export const submitPlantDataWithClimateConditions = async (plantData: AdviceRequestWithTemp): Promise<RecommendedPlant[]> => {
+    try {
+        console.log(plantData);
+        const response = await axiosInstance.put(`${API_BASE_URL}/advices/fullInfoClimate`, plantData);
+        console.log('Data successfully submitted:', response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error('Error submitting data:', error);
+        throw error;
+    }
+};
+
 
 
 export const fetchRecommendedPlants = async (): Promise<RecommendedPlant[]> => {

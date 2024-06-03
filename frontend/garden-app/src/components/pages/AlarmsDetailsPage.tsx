@@ -125,12 +125,6 @@ export const AlarmDetailsPage = () => {
                                             <Typography variant="body2" color="text.secondary">
                                                 {`Type: ${plant.plantType}`}
                                             </Typography>
-                                            {/*<Typography variant="body2" color="text.secondary">*/}
-                                            {/*    {`Functionalities: ${plant.functionalities.join(', ')}`}*/}
-                                            {/*</Typography>*/}
-                                            {/*<Typography variant="body2" color="text.secondary">*/}
-                                            {/*    {`Suitable Soils: ${plant.suitableSoils.map(soil => soil.soilType).join(', ')}`}*/}
-                                            {/*</Typography>*/}
                                         </CardContent>
                                     </Card>
                                 ))}

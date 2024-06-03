@@ -28,6 +28,10 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ setIsLoggedIn }) => {
         navigate("/alarms")
     }
 
+    const handleForm = () => {
+        navigate("/climate")
+    }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" sx={{ background: 'rgba(255, 255, 255, 0.9)' }}>
@@ -39,6 +43,10 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ setIsLoggedIn }) => {
                     <Typography variant="h6" component="div" sx={{ marginLeft: 2,  color: 'purple', cursor: 'pointer'}}
                                 onClick={handleAlarms}>
                         Alarms
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ marginLeft: 2,  color: 'purple', cursor: 'pointer'}}
+                                onClick={handleForm}>
+                        Garden
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Typography
